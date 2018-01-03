@@ -6,10 +6,13 @@ import com.fabio.springmvc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/customer")
@@ -36,11 +39,15 @@ public class CustomerController {
 
     @GetMapping("/new")
     public String newCustomer(Model model){
-        model.addAttribute("customer", new CustomerForm());
+        model.addAttribute("customerForm", new CustomerForm());
         return "customer/customerform";
     }
     @PostMapping
-    public String saveOrUpdateCustomer(CustomerForm customerForm){
+    public String saveOrUpdateCustomer(@Valid CustomerForm customerForm
+            , BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "customer/customerForm";
+        }
         Customer savedCustomer = customerService.saveOrUpdateCustomerForm(customerForm);
         return "redirect:/customer/"+savedCustomer.getId();
     }
@@ -66,7 +73,7 @@ public class CustomerController {
             customerForm.setAddressState(customer.getBillingAddress().getState());
             customerForm.setAddressZipCode(customer.getBillingAddress().getZipCode());
         }
-        model.addAttribute("customer", customerForm);
+        model.addAttribute("customerForm", customerForm);
         return "customer/customerform";
     }
     @GetMapping("/delete/{id}")

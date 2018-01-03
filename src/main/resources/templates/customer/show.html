@@ -28,7 +28,7 @@
                     <label class="col-sm-2 control-label">Customer id:</label>
                     <div class="col-sm-10">
                         <p class="form-control-static" th:text="${customer.id}">
-                            Product Id:
+                            Customer Id:
                         </p>
                     </div>
                 </div>
@@ -44,6 +44,14 @@
                     <label class="col-sm-2 control-label">Last Name:</label>
                     <div class="col-sm-10">
                         <p class="form-control-static" th:text="${customer.lastName}">
+                            LastName:
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">User Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer?.user?.username}">
                             LastName:
                         </p>
                     </div>
