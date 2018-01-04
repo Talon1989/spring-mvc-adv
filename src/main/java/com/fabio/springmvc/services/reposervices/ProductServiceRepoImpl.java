@@ -1,5 +1,8 @@
 package com.fabio.springmvc.services.reposervices;
 
+import com.fabio.springmvc.commands.ProductForm;
+import com.fabio.springmvc.converters.ProductFormToProduct;
+import com.fabio.springmvc.converters.ProductToProductForm;
 import com.fabio.springmvc.domain.Product;
 import com.fabio.springmvc.repositories.ProductRepository;
 import com.fabio.springmvc.services.ProductService;
@@ -15,10 +18,13 @@ import java.util.List;
 public class ProductServiceRepoImpl implements ProductService{
 
     private ProductRepository productRepository;
+    private ProductFormToProduct productFormToProduct;
+    private ProductToProductForm productToProductForm;
 
-    @Autowired
-    public ProductServiceRepoImpl(ProductRepository productRepository) {
+    public ProductServiceRepoImpl(ProductRepository productRepository, ProductFormToProduct productFormToProduct, ProductToProductForm productToProductForm) {
         this.productRepository = productRepository;
+        this.productFormToProduct = productFormToProduct;
+        this.productToProductForm = productToProductForm;
     }
 
     @Override
@@ -42,5 +48,11 @@ public class ProductServiceRepoImpl implements ProductService{
     @Override
     public void delete(Integer id) {
         productRepository.delete(id);
+    }
+
+    @Override
+    public Product saveOrUpdateProductForm(ProductForm productForm) {
+        Product newProdut = productFormToProduct.convert(productForm);
+        return saveOrUpdate(newProdut);
     }
 }

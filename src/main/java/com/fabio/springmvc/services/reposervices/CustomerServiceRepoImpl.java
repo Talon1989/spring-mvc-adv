@@ -4,10 +4,12 @@ import com.fabio.springmvc.commands.CustomerForm;
 import com.fabio.springmvc.converters.CustomerFormToCustomer;
 import com.fabio.springmvc.domain.Customer;
 import com.fabio.springmvc.repositories.CustomerRepository;
+import com.fabio.springmvc.repositories.UserRepository;
 import com.fabio.springmvc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,11 +19,13 @@ public class CustomerServiceRepoImpl implements CustomerService{
 
     private CustomerRepository customerRepository;
     private CustomerFormToCustomer customerFormToCustomer;
+    private UserRepository userRepository;
 
     @Autowired
-    public CustomerServiceRepoImpl(CustomerRepository customerRepository, CustomerFormToCustomer customerFormToCustomer) {
+    public CustomerServiceRepoImpl(CustomerRepository customerRepository, CustomerFormToCustomer customerFormToCustomer, UserRepository userRepository) {
         this.customerRepository = customerRepository;
         this.customerFormToCustomer = customerFormToCustomer;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,8 +44,11 @@ public class CustomerServiceRepoImpl implements CustomerService{
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
-        customerRepository.delete(id);
+        Customer customer = customerRepository.findOne(id);
+        userRepository.delete(customer.getUser());
+        customerRepository.delete(customer);
     }
 
     @Override

@@ -14,8 +14,7 @@ public class User extends AbstractDomainClass{
     private String password;
     private String encryptedPassword;
     private Boolean enabled = true;
-//    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
     @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true) // del all automatically
     private Cart cart;

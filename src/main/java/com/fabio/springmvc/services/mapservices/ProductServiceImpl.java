@@ -1,5 +1,6 @@
 package com.fabio.springmvc.services.mapservices;
 
+import com.fabio.springmvc.commands.ProductForm;
 import com.fabio.springmvc.domain.DomainObject;
 import com.fabio.springmvc.domain.Product;
 import com.fabio.springmvc.services.ProductService;
@@ -54,6 +55,11 @@ public class ProductServiceImpl extends AbstractMapService implements ProductSer
     @Override
     public Product saveOrUpdate(Product domainObject) {
         return (Product) super.saveOrUpdate(domainObject);
+    }
+
+    @Override
+    public Product saveOrUpdateProductForm(ProductForm productForm) {
+        return null;
     }
 
 //    @Override

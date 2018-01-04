@@ -13,8 +13,7 @@ public class Customer extends AbstractDomainClass{
     private Address billingAddress;
     @Embedded
     private Address shippingAddress;
-//    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;
 
     public String getFirstName() {

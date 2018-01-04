@@ -1,10 +1,12 @@
 package com.fabio.springmvc.controllers;
 
 import com.fabio.springmvc.commands.CustomerForm;
+import com.fabio.springmvc.converters.CustomerToCustomerForm;
 import com.fabio.springmvc.domain.Address;
 import com.fabio.springmvc.domain.Customer;
 import com.fabio.springmvc.domain.User;
 import com.fabio.springmvc.services.CustomerService;
+import com.fabio.springmvc.validator.CustomerFormValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -30,6 +32,8 @@ import static org.junit.Assert.*;
 
 public class CustomerControllerTest {
 
+    // REMOVED FOR ISSUES WITH CONVERTERS
+
     @Mock
     CustomerService customerService;
 
@@ -41,6 +45,8 @@ public class CustomerControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        customerController.setCustomerFormValidator(new CustomerFormValidator());
+        customerController.setCustomerToCustomerForm(new CustomerToCustomerForm());
         mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
     }
 

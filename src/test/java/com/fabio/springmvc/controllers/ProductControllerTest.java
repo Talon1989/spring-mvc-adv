@@ -1,5 +1,7 @@
 package com.fabio.springmvc.controllers;
 
+import com.fabio.springmvc.commands.ProductForm;
+import com.fabio.springmvc.converters.ProductToProductForm;
 import com.fabio.springmvc.domain.Product;
 import com.fabio.springmvc.services.ProductService;
 import org.junit.Before;
@@ -26,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ProductControllerTest {
 
+    // REMOVED FOR ISSUES WITH CONVERTERS
+
     @Mock // mocks the dependency injection
     ProductService productService;
 
@@ -37,6 +41,7 @@ public class ProductControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        productController.setProductToProductForm(new ProductToProductForm());
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
     }
 
@@ -71,7 +76,7 @@ public class ProductControllerTest {
         mockMvc.perform(get("/product/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("product/productform"))
-                .andExpect(model().attribute("product", instanceOf(Product.class)));
+                .andExpect(model().attribute("productForm", instanceOf(ProductForm.class)));
     }
 
     @Test
@@ -80,34 +85,42 @@ public class ProductControllerTest {
         mockMvc.perform(get("/product/edit/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("product/productform"))
-                .andExpect(model().attribute("product", instanceOf(Product.class)));
+                .andExpect(model().attribute("productForm", instanceOf(ProductForm.class)));
     }
 
     @Test
     public void testSaveOrUpdate() throws Exception {
 
-        Product returnProduct = new Product();
-        returnProduct.setId(1); returnProduct.setDescription("Test Description");
-        returnProduct.setPrice(new BigDecimal("12.00")); returnProduct.setImageUrl("exmaple.com");
+        Integer id = 1;
+        String description = "Test Description";
+        BigDecimal price = new BigDecimal("12.00");
+        String imageUrl = "http://example.com";
 
-        when(productService.saveOrUpdate(Matchers.<Product>any()))
-                .thenReturn(returnProduct);
+        Product returnProduct = new Product();
+        returnProduct.setId(id);
+        returnProduct.setDescription(description);
+        returnProduct.setPrice(price);
+        returnProduct.setImageUrl(imageUrl);
+
+        when(productService.saveOrUpdateProductForm(Matchers.<ProductForm>any())).thenReturn(returnProduct);
 
         mockMvc.perform(post("/product")
-            .param("id","1").param("description", "Test Description")
-                .param("price","12.00").param("imageUrl","example.com")
-        )
+                .param("id", "1")
+                .param("description", description)
+                .param("price", "12.00")
+                .param("imageUrl", "http://example.com"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/product/1"))
-                .andExpect(model().attribute("product",instanceOf(Product.class)))
-                .andExpect(model().attribute("product", hasProperty("id", is(1))))
-                .andExpect(model().attribute("product", hasProperty("description", is("Test Description"))));
+                .andExpect(view().name("redirect:/product/1"));
 
-        ArgumentCaptor<Product> boundProduct = ArgumentCaptor.forClass(Product.class);
-        verify(productService).saveOrUpdate(boundProduct.capture());
 
-        assertEquals("Test Description", boundProduct.getValue().getDescription());
+        //verify properties of bound object
+        ArgumentCaptor<ProductForm> boundProduct = ArgumentCaptor.forClass(ProductForm.class);
+        verify(productService).saveOrUpdateProductForm(boundProduct.capture());
 
+        assertEquals(id, boundProduct.getValue().getId());
+        assertEquals(description, boundProduct.getValue().getDescription());
+        assertEquals(price, boundProduct.getValue().getPrice());
+        assertEquals(imageUrl, boundProduct.getValue().getImageUrl());
     }
 
     @Test
