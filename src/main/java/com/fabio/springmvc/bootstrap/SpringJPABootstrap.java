@@ -38,6 +38,7 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         loadOrderHistory();
         loadRoles();
         assignUsersToDefaultRole();
+        assignUsersToAdminRole();
     }
 
     private void loadProduct(){
@@ -155,6 +156,9 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         Role role = new Role();
         role.setRole("CUSTOMER");
         roleService.saveOrUpdate(role);
+        Role adminRole = new Role();
+        adminRole.setRole("ADMIN");
+        roleService.saveOrUpdate(adminRole);
     }
 
     private void assignUsersToDefaultRole(){
@@ -165,6 +169,21 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
                 users.forEach(user->{
                     user.addRole(role);
                     userService.saveOrUpdate(user);
+                });
+            }
+        });
+    }
+
+    private void assignUsersToAdminRole(){
+        List<Role>roles = (List<Role>)roleService.listAll();
+        List<User>users = (List<User>)userService.listAll();
+        roles.forEach(role->{
+            if(role.getRole().equalsIgnoreCase("ADMIN")){
+                users.forEach(user->{
+                    if(user.getUsername().equals("fabio")){
+                        user.addRole(role);
+                        userService.saveOrUpdate(user);
+                    }
                 });
             }
         });

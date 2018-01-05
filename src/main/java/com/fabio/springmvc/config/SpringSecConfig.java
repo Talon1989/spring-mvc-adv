@@ -57,13 +57,10 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter{
                 .and().authorizeRequests().antMatchers("/js").permitAll()
                 .and().formLogin().loginPage("/login").permitAll()
                 .and().authorizeRequests().antMatchers("/customer/**").authenticated()
-                .and().authorizeRequests().antMatchers("/user/**").authenticated()
+                .and().authorizeRequests().antMatchers("/user/**").hasAuthority("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/access_denied");
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
 
 }
-
-
-//http.csrf().disable();http.headers().frameOptions().disable();
