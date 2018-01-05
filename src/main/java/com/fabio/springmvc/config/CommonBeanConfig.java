@@ -11,7 +11,7 @@ public class CommonBeanConfig {
 
     @Bean
     public StrongPasswordEncryptor strongEncryptor(){
-        return new StrongPasswordEncryptor();
+        StrongPasswordEncryptor encryptor = new StrongPasswordEncryptor();
+        return encryptor;
     }
-
 }

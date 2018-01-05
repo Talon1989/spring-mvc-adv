@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @Profile("map")
@@ -37,4 +39,15 @@ public class UserServiceImpl extends AbstractMapService implements UserService{
         super.delete(id);
     }
 
+    @Override
+    public User findByUserName(String userName) {
+        Optional returnUser = domainMap.values().stream().filter(new Predicate<DomainObject>() {
+            @Override
+            public boolean test(DomainObject domainObject) {
+                User user = (User) domainObject;
+                return user.getUsername().equalsIgnoreCase(userName);
+            }
+        }).findFirst();
+        return (User) returnUser.get();
+    }
 }

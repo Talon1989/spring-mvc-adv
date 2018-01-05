@@ -10,4 +10,15 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    @GetMapping("/access_denied")
+    public String notAuth(){
+        return "access_denied";
+    }
+
+    @GetMapping("login")
+    public String login(){
+        return "login";
+    }
+
 }

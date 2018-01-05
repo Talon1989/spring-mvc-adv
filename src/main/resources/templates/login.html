@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <!--<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7/css/bootstrap.min.css"-->
+          <!--th:href="@{webjars}"-->
+          <!--rel="stylesheet" media="screen"/>-->
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.js"
+            integrity="sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg="
+            crossorigin="anonymous"></script>
+    <link href="../static/css/spring-core.css"
+          th:href="@{../static/css/spring-core.css}"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-4">
+            <h2>Login</h2>
+            <div>
+                <form class="form-horizontal" th:object="${loginForm}" th:action="@{/login}" method="post">
+
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <p>Invalid username and password.</p>
+                    </div>
+
+                    <div th:if="${param.logout}" class="alert alert-success">
+                        <p>You've been logged out.</p>
+                    </div>
+
+                    <div class="form-group" th:class="${param.error} ? 'form-group has-error' : 'form-group'">
+                        <label class="col-sm-2 control-label">Username:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="username" id="username"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" th:class="${param.error} ? 'form-group has-error' : 'form-group'">
+                        <label class="col-sm-2 control-label">Password:</label>
+                        <div class="col-sm-10">
+                            <input type="password"  class="form-control" name="password" id="password"/>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
