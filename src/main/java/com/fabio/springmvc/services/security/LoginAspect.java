@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 public class LoginAspect {
 
     private LoginFailureEventPublisher publisher;
+    private LoginSuccessEventPublisher successEventPublisher;
 
     @Autowired
-    public LoginAspect(LoginFailureEventPublisher publisher) {
+    public LoginAspect(LoginFailureEventPublisher publisher, LoginSuccessEventPublisher successEventPublisher) {
         this.publisher = publisher;
+        this.successEventPublisher = successEventPublisher;
     }
 
     @Pointcut("execution(* org.springframework.security.authentication.AuthenticationProvider.authenticate(..))")
@@ -31,6 +33,7 @@ public class LoginAspect {
             returning = "authentication")
     public void logAfterAuthenticate( Authentication authentication){
         System.out.println("This is after the Authenticate Method authentication: " + authentication.isAuthenticated());
+        successEventPublisher.publish(new LoginSuccessEvent(authentication));
     }
 
     @AfterThrowing("com.fabio.springmvc.services.security.LoginAspect.doAuthenticate() && args(authentication)")

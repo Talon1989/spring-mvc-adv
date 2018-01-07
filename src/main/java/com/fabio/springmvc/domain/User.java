@@ -23,6 +23,8 @@ public class User extends AbstractDomainClass{
     // -- check Role table for defaults
     private List<Role> roles = new ArrayList<>();
 
+    private Integer failedLoginAttempts = 0;
+
     public void addRole(Role role){
         if(!this.roles.contains(role)){
             this.roles.add(role);
@@ -94,5 +96,13 @@ public class User extends AbstractDomainClass{
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public void setFailedLoginAttempts(Integer failedLoginAttempts) {
+        this.failedLoginAttempts = failedLoginAttempts;
     }
 }
