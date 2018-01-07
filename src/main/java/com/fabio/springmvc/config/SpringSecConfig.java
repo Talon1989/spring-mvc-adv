@@ -10,11 +10,13 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 @Configuration
+@EnableWebSecurity
 public class SpringSecConfig extends WebSecurityConfigurerAdapter{
 
     private AuthenticationProvider authenticationProvider;
@@ -49,8 +51,10 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/console").disable()
+        http.csrf().ignoringAntMatchers("/console/**").disable().headers().frameOptions().disable()
+                .and()
                 .authorizeRequests().antMatchers("/**/favicon.ico") .permitAll()
+                .and().authorizeRequests().antMatchers("/console/**").permitAll()
                 .and().authorizeRequests().antMatchers("/product/**").permitAll()
                 .and().authorizeRequests().antMatchers("/webjars/**").permitAll()
                 .and().authorizeRequests().antMatchers("/static/css").permitAll()
@@ -59,7 +63,6 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter{
                 .and().authorizeRequests().antMatchers("/customer/**").authenticated()
                 .and().authorizeRequests().antMatchers("/user/**").hasAuthority("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/access_denied");
-        http.headers().frameOptions().disable();
     }
 
 }

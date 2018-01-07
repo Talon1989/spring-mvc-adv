@@ -10,9 +10,55 @@ public class Customer extends AbstractDomainClass{
     private String email;
     private String phoneNumber;
     @Embedded
-    private Address billingAddress;
+    @AttributeOverrides({
+            @AttributeOverride(
+                    name = "addressLine1",
+                    column = @Column(name = "billing_address_address_line1")
+            ),
+            @AttributeOverride(
+                    name = "addressLine2",
+                    column = @Column(name = "billing_address_address_line2")
+            ),
+            @AttributeOverride(
+                    name = "city",
+                    column = @Column(name = "billing_address_city")
+            ),
+            @AttributeOverride(
+                    name = "state",
+                    column = @Column(name = "billing_address_state")
+            ),
+            @AttributeOverride(
+                    name = "zipCode",
+                    column = @Column(name = "billing_address_zipcode")
+            )
+        }
+    )
+    private Address billingAddress = new Address();
     @Embedded
-    private Address shippingAddress;
+    @AttributeOverrides({
+            @AttributeOverride(
+                    name = "addressLine1",
+                    column = @Column(name = "shipping_address_address_line1")
+            ),
+            @AttributeOverride(
+                    name = "addressLine2",
+                    column = @Column(name = "shipping_address_address_line2")
+            ),
+            @AttributeOverride(
+                    name = "city",
+                    column = @Column(name = "shipping_address_city")
+            ),
+            @AttributeOverride(
+                    name = "state",
+                    column = @Column(name = "shipping_address_state")
+            ),
+            @AttributeOverride(
+                    name = "zipCode",
+                    column = @Column(name = "shipping_address_zipcode")
+            )
+        }
+    )
+    private Address shippingAddress = new Address();
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;
 
