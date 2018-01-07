@@ -26,6 +26,10 @@ public class LoginFailureEventHandler implements ApplicationListener<LoginFailur
         log.warn("LoginEvent failure for: "+authentication.getPrincipal());
         User user = userService.findByUserName((String)authentication.getPrincipal());
         if(user!=null){
+            if(!user.getEnabled()){
+                log.warn("## "+user.getUsername()+" is disabled");
+                return;
+            }
             user.setFailedLoginAttempts(user.getFailedLoginAttempts()+1);
             if(user.getFailedLoginAttempts()>3){
                 user.setEnabled(false);
