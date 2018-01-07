@@ -6,6 +6,7 @@ import com.fabio.springmvc.converters.ProductToProductForm;
 import com.fabio.springmvc.domain.Product;
 import com.fabio.springmvc.repositories.ProductRepository;
 import com.fabio.springmvc.services.ProductService;
+import com.fabio.springmvc.services.SendTextMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,19 @@ public class ProductServiceRepoImpl implements ProductService{
     private ProductRepository productRepository;
     private ProductFormToProduct productFormToProduct;
     private ProductToProductForm productToProductForm;
+    private SendTextMessageService sendTextMessageService;
 
-    public ProductServiceRepoImpl(ProductRepository productRepository, ProductFormToProduct productFormToProduct, ProductToProductForm productToProductForm) {
+    public ProductServiceRepoImpl(ProductRepository productRepository, ProductFormToProduct productFormToProduct, ProductToProductForm productToProductForm, SendTextMessageService sendTextMessageService) {
         this.productRepository = productRepository;
         this.productFormToProduct = productFormToProduct;
         this.productToProductForm = productToProductForm;
+        this.sendTextMessageService = sendTextMessageService;
     }
 
     @Override
     public List<?> listAll() {
 //        return (List<Product>)productRepository.findAll();
+        sendTextMessageService.sendTextMessage("Listing Products");
         List<Product> products = new ArrayList<>();
         productRepository.findAll().forEach(products::add);
         return products;
@@ -37,6 +41,7 @@ public class ProductServiceRepoImpl implements ProductService{
 
     @Override
     public Product getById(Integer id) {
+        sendTextMessageService.sendTextMessage("Requested product id: "+id);
         return productRepository.findOne(id);
     }
 

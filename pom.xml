@@ -51,7 +51,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -75,6 +74,17 @@
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt-springsecurity3</artifactId>
 			<version>1.9.2</version>
+		</dependency>
+
+		<!--JMS Dep-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-broker</artifactId>
 		</dependency>
 
 		<dependency>
